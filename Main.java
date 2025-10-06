@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
@@ -17,13 +18,12 @@ public class Main {
         }
         System.out.println(array1);
 
-        Fraction infos = new Fraction(5, 2);
+        Fraction infos = new Fraction().init(5, 2);
         System.out.println(infos.fractionalPart());
-        System.out.println(infos.add(new Fraction(1, 2)).info());
+        System.out.println(infos.add(new Fraction().init(1, 2)).display());
 
-        Country count = new Country(new City(100, 20.1), new City(200, 30.2), new City(300, 40.3), 20.4, 30);
+        Country count = new Country().init(new City().init(30, 2), new City().init(40, 10), new City().init(200, 30), 50, 20);
         System.out.println(count.info_max_pop().display());
-
     }
 }
 
@@ -31,9 +31,16 @@ class Fraction {
     public int numerator;
     public int denominator;
 
-    public Fraction(int numerator, int denominator) {
+    public Fraction init(int numerator, int denominator){
         this.numerator = numerator;
         this.denominator = denominator;
+        return this;
+    }
+
+    public Fraction read(Scanner sc) {
+        this.numerator = sc.nextInt();
+        this.denominator = sc.nextInt();
+        return this;
     }
 
     public double fractionalPart() {
@@ -45,23 +52,30 @@ class Fraction {
     public Fraction add(Fraction other) {
         int newNumerator = this.numerator * other.denominator + other.numerator * this.denominator;
         int newDenominator = this.denominator * other.denominator;
-        return new Fraction(newNumerator, newDenominator);
+        return new Fraction().init(newNumerator, newDenominator);
     }
 
-    public String info() {
+    public String display() {
         return this.numerator + " " + this.denominator;
     }
-
 }
 
 class City {
     public int number_of_inhabitants;
     public double square;
 
-    public City(int number_of_inhabitants, double square) {
+    public City init(int number_of_inhabitants, double square) {
         this.number_of_inhabitants = number_of_inhabitants;
         this.square = square;
+        return this;
     }
+
+    public City read(Scanner sc) {
+        this.number_of_inhabitants = sc.nextInt();
+        this.square = sc.nextDouble();
+        return this;
+    }
+
 
     public double population_area() {
         return (double) this.number_of_inhabitants / this.square;
@@ -79,12 +93,27 @@ class Country {
     public double square;
     public int pop;
 
-    public Country(City city1, City city2, City city3, double square, int pop) {
+    public Country init(City city1, City city2, City city3, double square, int pop) {
         this.city1 = city1;
         this.city2 = city2;
         this.city3 = city3;
         this.square = square;
         this.pop = pop;
+        return this;
+    }
+
+public Country read(Scanner sc) {
+    this.city1 = new City().read(sc);
+    this.city2 = new City().read(sc);
+    this.city3 = new City().read(sc);
+
+    this.square = sc.nextDouble();
+    this.pop = sc.nextInt();
+    return this;
+}
+
+    public String display(){
+        return this.city1 + " " + this.city2 + " " + this.city3 + " " + this.square + " " + this.pop;
     }
 
     public double srplot() {
@@ -102,9 +131,4 @@ class Country {
         }
         return maxCity;
     }
-
-}
-
-public void info_all() {
-    System.out.println(null);
 }
